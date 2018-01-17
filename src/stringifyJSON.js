@@ -9,45 +9,38 @@ var stringifyJSON = function(obj) {
   if (typeof obj === 'function' || undefined) {
     return undefined;
   } else if (obj === null) {
-          return '' + null;
-    } else if (Array.isArray(obj)) {
-        if (obj.length === 0) {
-          return '[' + ']'; 
-        }
-        return '[' + obj.reduce(function(acc, element) {
-          acc.push(stringifyJSON(element));
-          return acc;
-        }, []) + ']';
-      } else if (typeof obj === 'object') {
-          var stringyObj = '{';
-          for (var key in obj) {
-             // if (Object.keys(obj)[Object.keys(obj).length-1] === key) {
-             //   stringyObj += '\"' + key + '\"' + ':' + stringifyJSON(obj[key])
-             // }
-            stringyObj += '\"' + key + '\"' + ':' + stringifyJSON(obj[key]) + ',';
-          }
-          // if (obj.length === undefined) {
-          //   return '{' + '}';
-          // }
-//Start here 
-          stringyObj.slice(0,stringyObj-2);
-          return stringyObj + '}'; 
-
-         }else if (typeof obj === 'string') {
-            return '"' + obj + '"';
-          } else if (typeof obj === 'number') {
-            return "" + obj;
-          } else if (typeof obj === 'boolean') {
-            return '' + obj;
-          }
-      // obj.reduce(function(acc, element){stringify; add to our acc},'')
-      // return [ + reduce function + ] 
-        // reduce to a string
-        // ""
-      // if element is the last element of the array we call without the , 
-      // for each element
-      // bring to recursive case
-      // bring to base case
+    return '' + null;
+  } else if (Array.isArray(obj)) {
+    if (obj.length === 0) {
+      return '[' + ']'; 
+    }
+    return '[' + obj.reduce(function(acc, element) {
+      acc.push(stringifyJSON(element));
+      return acc;
+    }, []) + ']';
+  } else if (typeof obj === 'object') {
+    var arr = [];
+    for (var key in obj) {
+      if (typeof obj[key] === 'function' || obj[key] === undefined) {
+        return '{' + '}';
+      } 
+      arr.push(stringifyJSON(key) + ':' + stringifyJSON(obj[key]));
+    }
+    return '{' + arr + '}';
+  } else if (typeof obj === 'string') {
+    return '"' + obj + '"';
+  } else if (typeof obj === 'boolean') {
+    return '' + obj;
+  }
+  return '' + obj;
+  // obj.reduce(function(acc, element){stringify; add to our acc},'')
+  // return [ + reduce function + ] 
+  // reduce to a string
+  // ""
+  // if element is the last element of the array we call without the , 
+  // for each element
+  // bring to recursive case
+  // bring to base case
 };
 
 // i = data type
